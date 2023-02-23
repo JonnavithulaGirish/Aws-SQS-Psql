@@ -4,7 +4,7 @@ Post successful build and launch you would see a screen something like this:
 
 
 ## Steps to run the repository with explanation 
-1)  git clone **https://github.com/JonnavithulaGirish/Aws-SQS-Psql.git**
+1)  **git clone https://github.com/JonnavithulaGirish/Aws-SQS-Psql.git**
 2)  Make sure you have **Node.js installed** in your local machine.
 3)  **npm install** -- (Note:: all the node packages are already included in the repository, Just to be on safe side you can run this step).
 4)  In the directory of the repository run the following command : **docker compose up** -- (this will make sure to lauch the docker container containing the following images- "fetchdocker/data-takehome-postgres", "fetchdocker/data-takehome-localstack")
@@ -14,7 +14,7 @@ Post successful build and launch you would see a screen something like this:
 
 
 ## Steps to run the repository -- simple version
-1)  git clone **https://github.com/JonnavithulaGirish/Aws-SQS-Psql.git**
+1)  **git clone https://github.com/JonnavithulaGirish/Aws-SQS-Psql.git**
 2)  **npm install**
 3)  **docker compose up**
 4)  **node app**
@@ -71,21 +71,28 @@ Post successful build and launch you would see a screen something like this:
    4) It also becomes extremely important for us to make sure that postgres cluster is highly available. Inorder to achieve this we should add redundancy nodes to handle postgres crashes and runtime failures.
  
 
-● How can PII be recovered later on?
-● What are the assumptions you made?
+### How can PII be recovered later on?
+    Since we are using SHA256 to mask PII related data, recovery of this data would not be possible. However, if we would require the data to be recovered later we could use other encryption algorithms where decryption would use some kind of Public/private key. 
+
+### What are the assumptions you made?
+    Here are some of the assumptions I have made:
+    1) PII data need not be recoverable, it should be masked and the only requirement was to easily find duplicates even with masked data.
+    2) Application would poll the queue every one second and delete the entry from queue after 1 minute (ideally this not necessary in this scenario but would be useful if other applcations are are also listening to the same message queue).
+    3) It is required for us to render data onto somekind of dashboard.
+    4) Data received on the queue will definely contain the following fields : user_id, ip, device_id. If not these messages will be ignored.
 
 
 
+## In Conclusion:
+### The project aims to read data from AWS SQS queue every second and if any new message is received it'll push the entry into PostgresSql.
 
-## The project aims to read data from AWS SQS queue every second and if any new message is received it'll push the entry into PostgresSql.
-
-## TechStack Used
+### TechStack Used
 1) Node.js
 2) Express.js
 3) PostgresSQL
 
 
-## Node Modules Used
+### Node Modules Used
 1) express
 2) aws-sdk
 3) pg
