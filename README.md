@@ -28,6 +28,7 @@ Post successful build and launch you would see a screen something like this:
    1) "accessKeyId": "test"
    2) "secretAccessKey": "test"
    3) "region": "us-east-1"
+
    One challenge here would be to poll the queue continuously to check for new messages. Inorder to achieve this, I am polling the queue every second.
    
    
