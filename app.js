@@ -2,6 +2,7 @@ var express = require('express');
 var aws = require('aws-sdk');
 const { Client } = require('pg');
 const { createHash } = require('node:crypto');
+var appSettings = require('./Appsettings.json');
 
 
 var queueUrl = "http://localhost:4566/000000000000/login-queue";
@@ -19,6 +20,7 @@ app.set('view engine', 'ejs');
 
 // Initializing SQS.
 var sqs = new aws.SQS();
+
 
 //Api Calls
 app.get('/', async function (req, res) {
@@ -68,11 +70,11 @@ async function receiveMessages() {
 
 async function connectToPostgres() {
     const client = new Client({
-        host: "localhost",
-        port: 5432,
-        user: "postgres",
-        password: "postgres",
-        database: "postgres",
+        host: appSettings.host,
+        port: appSettings.port,
+        user: appSettings.user,
+        password: appSettings.password,
+        database: appSettings.database,
     });
     await client.connect();
     return client;
