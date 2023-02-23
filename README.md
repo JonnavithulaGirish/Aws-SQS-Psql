@@ -2,6 +2,18 @@
 
 The project aims to read data from AWS SQS queue every second and if any new message is received it'll push the entry into PostgresSql.
 
+##TechStack Used##
+1) Node.js
+2) Express.js
+3) PostgresSQL
+
+
+##Node Modules Used##
+1) express
+2) aws-sdk
+3) pg
+4) node:crypto
+
 Post successful build and launch you would see a screen something like this:
 ![image](https://user-images.githubusercontent.com/23165664/220879545-79cc6136-b162-42e1-b98c-0b91438f4833.png)
 
@@ -23,4 +35,50 @@ Post successful build and launch you would see a screen something like this:
 4)  **node app**
 
 
+
+##Some of the decisions taken to build this solution:
+
+###How will you read messages from the queue?
+   Using aws-sdk node module that is configured with the queue-url(http://localhost:4566/000000000000/login-queue) and configuration set as follows:
+   1) "accessKeyId": "test"
+   2) "secretAccessKey": "test"
+   3) "region": "us-east-1"
+   One challenge here would be to poll the queue continuously to check for new messages. Inorder to achieve this, I am polling the queue every second.
+   
+   
+###What type of data structures should be used?
+   Each message is Javascript object which is just a collection key value pairs. 
+   list of Messages will be stored as array of Javascript Objects.
+   
+
+###How will you mask the PII data so that duplicate values can be identified?
+  Masking the PII data is done using SHA256 digest of the original string. I have used this approach because SHA256 provieds strong cryptograpic securing with a very low collision probabilty and adding to this, duplicates will still point to the same hash digest that will help us to easily indentify duplicates without compromising on security.
+  
+  
+###What will be your strategy for connecting and writing to Postgres?
+  On receiving data from message queue and if it contains vaild data, we will be masking the PII related data and finally connect to Postgres and Inster the new message received.
+  
+###Where and how will your application run?
+  Application will be run locally for development which launces an express.js server aimed to do the following functionalities:
+  1) Actively Poll AWS SQS queue and check for new messages.
+  2) Insert New messages on to Postgres.
+  3) Render User login details on a UI by getting data from Postgres.
+
+
+## Assignment Questions
+
+###How would you deploy this application in production?
+  1) Package.json file is already created for this project which contains production scripts to launch a build on any container. (refer-- https://github.com/JonnavithulaGirish/Aws-SQS-Psql/blob/main/package.json)
+  2) Inorder to build Node.js application in production we should run the following command that would create a build folder : **ng build --prod**
+  3) To automate build and deployment process we could create github CI/CD pipeline which runs the above command and other does codechecks(such as unittest, integration test and static code analysis). Once all these checks pass we can create a container with Node.js buildpack that would run the start script declared in package.json file.
+
+###What other components would you want to add to make this production ready?
+  1) Ideally it would also be greate to add blue-green deployment strategy to make sure that the life traffic is not affected by any active production release. We can achieve this by adding additional steps on the CI/CD pipeline and make sure that the build is first pushed on to a green container and once the testing is done on this layer, we could elevate the could to production.
+  2) It would be great to move credentials related data onto HashiCorp Vault or any similar service which could help us update configs on-the-fly(such as Postgres login credentials and AWS config related data) that can be cnhaged direclty without the necessity of rebuilding the application.
+
+###How can this application scale with a growing dataset.
+ 
+
+● How can PII be recovered later on?
+● What are the assumptions you made?
 
