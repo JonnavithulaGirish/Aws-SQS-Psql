@@ -1,0 +1,23 @@
+{
+  "name": "aws-sqs-psql",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "node app"
+  },
+  "description": "Aws-SQS-Psql",
+  "author": {
+    "name": ""
+  },
+  "dependencies": {
+    "aws-sdk": "^2.1321.0",
+    "body-parser": "^1.15.0",
+    "cookie-parser": "^1.4.0",
+    "debug": "^2.2.0",
+    "ejs": "^3.1.6",
+    "express": "^4.18.2",
+    "morgan": "^1.7.0",
+    "pug": "^2.0.0-beta6",
+    "serve-favicon": "^2.3.0"
+  }
+}

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include('../partials/head'); %>
+</head>
+<body class="container">
+
+<header>
+  <%- include('../partials/header'); %>
+</header>
+
+<main>
+  <div class="jumbotron">
+    <h1>User Login Data</h1>
+    <p>Welcome to User login dashboard</p>
+
+    <table style="table-layout:fixed;word-wrap:break-word;border:1px solid black;margin-left:auto;margin-right:auto;">
+        <tr>
+          <th style="width:20%;border:1px solid black;text-align: center;"> user_id </th>
+          <th style="width:10%;border:1px solid black;text-align: center;"> device_type </th>
+          <th style="width:10%;border:1px solid black;text-align: center;"> locale </th> 
+          <th style="width:10%;border:1px solid black;text-align: center;"> app_version </th>
+          <th style="width:10%;border:1px solid black;text-align: center;"> create_date </th>
+        </tr>
+        <% for (var i = 0; i < userData.length; i++) { %>
+            <tr>
+              <td style="width:20%;border:1px solid black;text-align: center;"><%= userData[i].user_id %></td>
+              <td style="width:10%;border:1px solid black;text-align: center;"><%= userData[i].device_type %></td>
+              <td style="width:10%;border:1px solid black;text-align: center;"><%= userData[i].locale %></td>
+              <td style="width:10%;border:1px solid black;text-align: center;"><%= userData[i].app_version %></td>
+              <td style="width:10%;border:1px solid black;text-align: center;"><%= userData[i].create_date.toDateString() %></td>
+            </tr>    
+       <% } %>
+    </table>
+  </div>
+</main>
+
+<footer>
+  <%- include('../partials/footer'); %>
+</footer>
+
+</body>
+</html>
