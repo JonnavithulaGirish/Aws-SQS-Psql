@@ -119,15 +119,15 @@ Post successful build and launch you would see a screen something like this:
 
 
 ## In Conclusion:
-### The project aims to read data from AWS SQS queue every second and if any new message is received it'll push the entry into PostgresSql.
+#### The project aims to read data from AWS SQS queue every second and if any new message is received it'll push the entry into PostgresSql.
 
-### TechStack Used
+#### TechStack Used
 1) Node.js
 2) Express.js
 3) PostgresSQL
 
 
-### Node Modules Used
+#### Node Modules Used
 1) express
 2) aws-sdk
 3) pg
