@@ -72,7 +72,7 @@ Post successful build and launch you would see a screen something like this:
     2) Inorder to build Node.js application in production we should run the following command that
     would create a build folder : **ng build --prod**
     3) To automate build and deployment process we could create github CI/CD pipeline which runs the
-    above command and other does codechecks(such as unittest,integration test and static code analysis).
+    above command and also does codechecks(such as unittests,integration tests and static code analysis).
     Once all these checks pass we can create a container with Node.js buildpack that would run the start
     script declared in package.json file.
 
