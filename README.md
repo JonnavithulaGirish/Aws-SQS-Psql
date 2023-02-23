@@ -33,11 +33,12 @@ Post successful build and launch you would see a screen something like this:
    
 ### What type of data structures should be used?
    Each message is Javascript object which is just a collection key value pairs. 
-   list of Messages will be stored as an array of Javascript Objects.
+   
+   List of Messages will be stored as an array of Javascript Objects.
    
 
 ### How will you mask the PII data so that duplicate values can be identified?
-  Masking the PII data is done using SHA256 digest of the original string. I have used this approach because SHA256 provieds strong cryptograpic security with a very low collision probabilty and adding to this, duplicates will still point to the same hash digest that will help us to easily indentify duplicates without compromising on security.
+  Masking the PII data is done using SHA256 digest of the original string. I have used this approach because SHA256 provides strong cryptograpic security with a very low collision probabilty and adding to this, duplicates will still point to the same hash digest that will help us to easily identify duplicates without compromising on security.
   
   
 ### What will be your strategy for connecting and writing to Postgres?
