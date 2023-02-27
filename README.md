@@ -8,11 +8,11 @@ Post successful build and launch you would see a screen something like this:
 ## Steps to run the repository with explanation 
     1)  git clone https://github.com/JonnavithulaGirish/Aws-SQS-Psql.git
     2)  Make sure you have Node.js installed in your local machine.
-    3)  npm install -- (Note:: all the node packages are already included in the repository,
-    Just to be on safe side you can run this step).
+    3)  npm install [(Note:: all the node packages are already included in the repository,
+    Just to be on safe side you can run this step)].
     4)  In the directory of the repository run the following command : 
-    docker compose up --(this will make sure to lauch the docker container containing the 
-    following images- "fetchdocker/data-takehome-postgres", "fetchdocker/data-takehome-localstack")
+    docker compose up [(this will make sure to lauch the docker container containing the 
+    following images- "fetchdocker/data-takehome-postgres", "fetchdocker/data-takehome-localstack")]
     5) Once the above step is successful in a new cmd run the following command: node app.
     6) You should now see the application to be up and running in localhost:3000.
     7) On opening this localhost:3000, you would the a screen as mentioned above.
@@ -72,7 +72,7 @@ Post successful build and launch you would see a screen something like this:
     2) Inorder to build Node.js application in production we should run the following command that
     would create a build folder : **ng build --prod**
     3) To automate build and deployment process we could create github CI/CD pipeline which runs the
-    above command and other does codechecks(such as unittest,integration test and static code analysis).
+    above command and also does codechecks(such as unittests,integration tests and static code analysis).
     Once all these checks pass we can create a container with Node.js buildpack that would run the start
     script declared in package.json file.
 
@@ -86,31 +86,28 @@ Post successful build and launch you would see a screen something like this:
     that can be changed directly without the necessity of rebuilding the application.
 
 ### How can this application scale with a growing dataset.
-    I beilieve the following approaches can be followd ro scale the application:
-    1) Horizontal scale up of the node.js application if the live user traffic to view User login data on the dashboard.
+    I beilieve the following approaches can be followed to scale the application:
+    1) Horizontal scale up of the node.js application if the live user traffic to view User login data on the dashboard increases.
     2) If we take the above approach we should probably implement a load balancer to route the user request to
     the container which is handling least number of user request at the current period of time.
     3) We could use both vertical and horizontal scaling in case of PostgresSQL: Since amount of
-    data stored will increase with the growing dataset,
-    it would be optimal to expand the PostgrsSQL resource vertically to a certain exptent but post this
-    we could horizontally scale Postgres.
+    data stored will increase with growing dataset, it would be optimal to expand the PostgrsSQL
+    resource vertically to a certain exptent but post this we could horizontally scale Postgres.
     4) It also becomes extremely important for us to make sure that postgres cluster is highly available.
-    Inorder to achieve this we should add 
-    redundancy nodes to handle postgres crashes and runtime failures.
+    Inorder to achieve this we should add redundancy nodes to handle postgres crashes and runtime failures.
  
 
 ### How can PII be recovered later on?
     Since we are using SHA256 to mask PII related data, recovery of this data would not be possible.
-    However, if we would require the data to be 
-    recovered later we could use other encryption algorithms where decryption would use some kind of
-    Public/private key. 
+    However, if we would require the data to be recovered later, we could use other encryption algorithms
+    where decryption would use some kind of Public/private key. 
 
 ### What are the assumptions you made?
     Here are some of the assumptions I have made:
     1) PII data need not be recoverable, it should be masked and the only requirement was to easily
     find duplicates even with masked data.
-    2) Application would poll the queue every one second and delete the entry from queue after 1 minute
-    (ideally this not necessary in this scenario but would be useful if other applcations are are also
+    2) Application would poll the queue every second and deletes the entry from queue after 1 minute
+    (ideally this not necessary in this scenario but would be useful if other applcations are also
     listening to the same message queue).
     3) It is required for us to render data onto somekind of dashboard.
     4) Data received on the queue will definely contain the following fields : user_id, ip, device_id.
@@ -119,15 +116,15 @@ Post successful build and launch you would see a screen something like this:
 
 
 ## In Conclusion:
-### The project aims to read data from AWS SQS queue every second and if any new message is received it'll push the entry into PostgresSql.
+#### The project aims to read data from AWS SQS queue every second and if any new message is received it'll push the entry into PostgresSql.
 
-### TechStack Used
+#### TechStack Used
 1) Node.js
 2) Express.js
 3) PostgresSQL
 
 
-### Node Modules Used
+#### Node Modules Used
 1) express
 2) aws-sdk
 3) pg
