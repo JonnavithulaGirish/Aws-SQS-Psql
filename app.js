@@ -29,13 +29,19 @@ app.get('/', async function (req, res) {
 });
 
 
+app.get('/userData', async function (req, res) {
+    var data = await ReadUserData();
+    res.render('pages/userIndex', { userData: data, liveUsers: 0, multipleDeviceUser:0 });
+});
+
+
 //Set express app properties
 app.set('port', process.env.PORT || 3000);
 
 var server = app.listen(app.get('port'),async function () {
     console.log('Express AWS-SQS-PSql server up and running' + server.address().port);
     //Calling Aws sqs queue every 1min
-    setInterval(receiveMessages, 1000);
+    //setInterval(receiveMessages, 1000);
 });
 
 
@@ -69,30 +75,61 @@ async function receiveMessages() {
 
 
 async function connectToPostgres() {
-    const client = new Client({
-        host: appSettings.host,
-        port: appSettings.port,
-        user: appSettings.user,
-        password: appSettings.password,
-        database: appSettings.database,
-    });
-    await client.connect();
-    return client;
+    try {
+        const client = new Client({
+            host: appSettings.host,
+            port: appSettings.port,
+            user: appSettings.user,
+            password: appSettings.password,
+            database: appSettings.database,
+        });
+        await client.connect();
+        return client;
+    }
+    catch (err) {
+        console.log("connectToPostgres failed");
+        console.log(err);
+        throw err;
+    }
 }
 
-async function ReadData(){
-    const client = await connectToPostgres();
-    const entries = await client.query('SELECT * FROM user_logins;');    
-    await client.end();
-    return entries.rowCount != 0? entries.rows : [];
+async function ReadData() {
+    try {
+        const client = await connectToPostgres();
+        const entries = await client.query('SELECT * FROM user_logins;');
+        await client.end();
+        return entries.rowCount != 0 ? entries.rows : [];
+    } catch (err) {
+        console.log("ReadData failed");
+        console.log(JSON.stringify(err));
+        return [];
+    }
+}
+
+async function ReadUserData() {
+    try {
+        const client = await connectToPostgres();
+        const entries = await client.query('SELECT user_id,count(Distinct masked_ip) as number_of_unique_ips,count(Distinct masked_Device_id) as number_of_unique_devices, MAX(create_date) as latest_login_date FROM user_logins GROUP BY user_id;');
+        await client.end();
+        return entries.rowCount != 0 ? entries.rows : [];
+    }
+    catch (err) {
+        console.log(JSON.stringify(err));
+        return [];
+    }
 }
 
 async function InsertData(data) {
-    const client = await connectToPostgres();
-    let insertRow = await client.query('INSERT INTO  user_logins (user_id, device_type, masked_ip, masked_device_id, locale, app_version, create_date) VALUES($1,$2,$3,$4,$5,$6,$7);',
-        [data.user_id, data.device_type, data.ip, data.device_id, data.locale, parseInt(data.app_version), new Date()]);
-    console.log(`Inserted ${insertRow.rowCount} row`);
-    await client.end();
+    try {
+        const client = await connectToPostgres();
+        let insertRow = await client.query('INSERT INTO  user_logins (user_id, device_type, masked_ip, masked_device_id, locale, app_version, create_date) VALUES($1,$2,$3,$4,$5,$6,$7);',
+            [data.user_id, data.device_type, data.ip, data.device_id, data.locale, parseInt(data.app_version), new Date()]);
+        await client.end();
+    }
+    catch (err) {
+        console.log("InsertData failed");
+        console.log(JSON.stringify(err));
+    }
 }
 
 
